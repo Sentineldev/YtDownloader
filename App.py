@@ -1,6 +1,7 @@
 from threading import Thread
 from tkinter import *
 from tkinter import ttk
+from xmlrpc.client import Boolean
 
 from pytube import YouTube
 
@@ -30,13 +31,21 @@ class App:
 
     #Top container and it's widgets
     __search_url_var = StringVar()
+    __search_video_filter = StringVar()
+
 
     __search_url_frame = ttk.Frame(__mainWindow)
 
     __search_url_widgets_frame = ttk.Frame(__search_url_frame)
     __search_url_label = ttk.Label(__search_url_widgets_frame)
     __search_url_entry = ttk.Entry(__search_url_widgets_frame,textvariable=__search_url_var)
-    __search_url_button = ttk.Button(__search_url_widgets_frame) 
+    __search_url_button = ttk.Button(__search_url_widgets_frame)
+
+    __search_radio_button_frame = ttk.Frame(__search_url_frame)
+    __search_video_only_filter_radio_button = ttk.Radiobutton(__search_radio_button_frame,text="Video Only",variable=__search_video_filter,value="Video")
+    __search_audio_only_filter_radio_button = ttk.Radiobutton(__search_radio_button_frame,text="Audio Only",variable=__search_video_filter,value="Audio")
+    __search__progressive_filter_radio_button = ttk.Radiobutton(__search_radio_button_frame,text="Video/Audio",variable=__search_video_filter,value="Progressive")
+    
 
     __search_response_label = ttk.Label(__search_url_widgets_frame)
 
@@ -118,21 +127,33 @@ class App:
         self.__search_url_button.configure(width=30,padding=6,command=self.__searchButtonCallBack,text="Search")
         self.__search_url_button.grid(row=2,column=0,padx=8,pady=8)
 
+
+        self.__search_radio_button_frame.grid(row=3,column=0,pady=(10,0),padx=5)
+
+        self.__search_audio_only_filter_radio_button.grid(row=0,column=0,padx=10)
+        self.__search_video_only_filter_radio_button.grid(row=0,column=1,padx=10)
+        self.__search__progressive_filter_radio_button.grid(row=0,column=2,padx=10)
+
     def __searchButtonCallBack(self):
         
 
+        
         #status of the search.
         if self.__search_url_var.get() !=  "":
-            
-            if not self.__searching_status:
-                
-                self.__searching_status = True
-                Thread(target=self.__ProcessURL).start()
+            if self.__search_video_filter.get() != "":
+                if not self.__searching_status:
+                    
+                    self.__searching_status = True
+                    Thread(target=self.__ProcessURL).start()
+                else:
+                    self.__search_response_label.configure(text="Wait a moment...")
+            else:
+                self.__search_response_label.configure(text="Select One of the options...")
                
         else:
             self.__search_response_label.configure(text="Invalid Url...")
 
-        self.__search_response_label.grid(row=3,column=0)
+        self.__search_response_label.grid(row=4,column=0)
 
     def __ProcessURL(self):
         
@@ -142,7 +163,13 @@ class App:
             self.__search_response_label.configure(text="Loading video data...")
             self.__setCurrentVideoFrame(yt)
             self.__search_response_label.configure(text="Loading streams...") 
-            streams = yt.streams.filter(only_audio=True)
+
+            if(self.__search_video_filter.get() == "Audio"):
+                streams = yt.streams.filter(only_audio=True)
+            elif(self.__search_video_filter.get() == "Video"):
+                streams = yt.streams.filter(only_video=True)
+            elif(self.__search_video_filter.get() == "Progressive"):
+                streams = yt.streams.filter(progressive=True)
             self.__setStreamFrames(streams)
             
         except Exception as e:
@@ -202,7 +229,7 @@ class App:
 
             if stream.is_progressive:
                 stream_format_label = ttk.Label(stream_frame,text="Format: Video/Audio",font="Ubuntu 12")
-                stream_quality_label = ttk.Label(stream_frame,text=f"Resolution: {stream.res}",font='Ubuntu 12')
+                stream_quality_label = ttk.Label(stream_frame,text=f"Resolution: {stream.resolution}",font='Ubuntu 12')
             elif stream.includes_audio_track:
                 stream_format_label = ttk.Label(stream_frame,text="Format: Audio Only ",font="Ubuntu 12")
                 stream_quality_label = ttk.Label(stream_frame,text=f"Abr: {stream.abr}",font='Ubuntu 12')
