@@ -142,7 +142,7 @@ class App:
             self.__search_response_label.configure(text="Loading video data...")
             self.__setCurrentVideoFrame(yt)
             self.__search_response_label.configure(text="Loading streams...") 
-            streams = yt.streams.filter(only_video=True)
+            streams = yt.streams.filter(only_audio=True)
             self.__setStreamFrames(streams)
             
         except Exception as e:
@@ -197,6 +197,7 @@ class App:
                 current_column = 0
             stream_frame = ttk.Frame(self.__canva_frame,padding=8)
             stream_frame.rowconfigure(0,weight=1)
+            stream_frame.columnconfigure(0,weight=1)
 
 
             if stream.is_progressive:
@@ -216,7 +217,7 @@ class App:
 
             
             stream_progress_bar_frame = ttk.Frame(stream_frame)
-           
+            stream_progress_bar_frame.columnconfigure(0,weight=1)
 
             stream_progress_bar_label = ttk.Label(stream_progress_bar_frame,text="Download...")
             stream_progress_bar = ttk.Progressbar(stream_progress_bar_frame,orient=HORIZONTAL,length=200,mode='determinate')
@@ -224,14 +225,14 @@ class App:
             
 
 
-            stream_frame.grid(row=current_row,column=current_column,padx=10,pady=10)
+            stream_frame.grid(row=current_row,column=current_column,padx=10,pady=10,sticky=(N,E,W))
             stream_format_label.grid(row=0,column=0,sticky=W)
             stream_size_label.grid(row=1,column=0,sticky=W)
             stream_quality_label.grid(row=2,column=0,sticky=W)
-            stream_download_button.grid(row=3,column=0,sticky=W)
-            stream_progress_bar_frame.grid(row=4,column=0,padx=10,pady=(15,0))
-            stream_progress_bar_label.grid(row=0,column=0,sticky=W)
-            stream_progress_bar.grid(row=1,column=0)
+            stream_download_button.grid(row=3,column=0,sticky=(N,W,E))
+            stream_progress_bar_frame.grid(row=4,column=0,padx=10,pady=(15,0),sticky=(N,W,E))
+            stream_progress_bar_label.grid(row=0,column=0,sticky=(N,W,E))
+            stream_progress_bar.grid(row=1,column=0,sticky=(N,W,E))
             
             current_column+=1
 
@@ -274,6 +275,9 @@ class App:
         """ Option canvas container  """
 
         self.__canva_frame.configure(bg=self.__dark_color)
+        self.__canva_frame.columnconfigure(0,weight=1)
+        self.__canva_frame.columnconfigure(1,weight=1)
+        self.__canva_frame.columnconfigure(2,weight=1)
         self.__canva_frame.grid(row=1,column=0,sticky=(W,E,S,N),padx=1,pady=0)
 
     
