@@ -27,6 +27,9 @@ class BottomFrame:
         self.__parent.grid(row=1,column=0,sticky=(N,E,W,S))
 
 
+    def removeChildsFrames(self):
+        self.__videoFrame.Parent.grid_remove()
+        self.__canvasFrame.Canvas.grid_remove()
 
 
    

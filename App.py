@@ -1,7 +1,6 @@
 from threading import Thread
 from tkinter import *
 from tkinter import ttk
-from xmlrpc.client import Boolean
 
 from pytube import YouTube
 
@@ -43,7 +42,6 @@ class App:
     #dict to manage the streams
     __current_streams = {}
 
-    #status
 
    
 
@@ -110,13 +108,11 @@ class App:
             on_complete_callback=self.__OnComplete
             )
 
-            self.__bottom.VideoFrame.Parent.grid_remove()
-            self.__bottom.CanvasFrame.Canvas.grid_remove()
+            self.__bottom.removeChildsFrames()
 
             self.__search_frame.setResponse("Loading video data...")
 
 
-            #self.__setCurrentVideoFrame(yt)
             
             self.__ShowVideoData(yt)
             self.__search_frame.setResponse("Loading streams...")
@@ -180,12 +176,7 @@ class App:
     
     def __ButtonCallBack(self,stream):
         self.__current_streams[stream.itag]['stream_frame'].ProgressBarLabel.configure(text="Downloading... 0.00%")
-        Thread(
-            target=partial(
-                self.__DownloadFile,
-                self.__current_streams[stream.itag]['stream']
-            )
-        ).start()
+        Thread(target=self.__DownloadFile,args=(self.__current_streams[stream.itag]['stream'],)).start()
         
     def __DownloadFile(self,stream):
         if not self.__current_streams[stream.itag]['OnDownload']:
