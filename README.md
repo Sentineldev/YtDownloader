@@ -1,9 +1,12 @@
 # YtDownloader
+
+
+
 Creating a youtube downloader using the Pytube Library from python
 
 This is a desktop app build with Python with the following librarys
 
-  Pytube to download videos and obtain data.
+  Pytube to download videos and obtain data. : https://pytube.io
   Tkinter to build a GUI.
   
  Process to build this desktop app
