@@ -16,3 +16,8 @@ This is a desktop app build with Python with the following librarys
   youtube videos that only have audio or videos that only have video
   and the option to convert to MP3 or WAV.
 
+
+
+  <h1>Preview of the first version</h1>
+  
+  ![alt text](https://github.com/Sentineldev/YtDownloader/blob/main/images/preview.png?raw=true)
