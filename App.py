@@ -82,25 +82,25 @@ class App:
 
     def __searchButtonCallBack(self):
         
-        #status of the search.
-        if self.__search_frame.EntryValue !=  "":
-            if self.__search_frame.FilterValue != "":
-                if not self.__searching_status:
-                    self.__searching_status = True
-                    Thread(target=self.__ProcessURL).start()
-                else:
-                    self.__search_frame.setResponse("Wait a moment...")
-            else:
-                self.__search_frame.setResponse("Select one of the options...")
-               
+        
+        if self.__search_frame.EntryValue == "":
+            self.__search_frame.setResponse("Not URL provide")
+        elif self.__search_frame.FilterValue == "":
+            self.__search_frame.setResponse("Select one of the filters")
+        elif self.__searching_status:
+            self.__search_frame.setResponse("Wait...")
         else:
-            self.__search_frame.setResponse("Invalid url...")
+            self.__search_frame.setResponse("Searching...")
+            self.__searching_status = True
+            self.__bottom.removeChildsFrames()  
+            Thread(target=self.__ProcessURL).start()
+       
 
 
 
     def __ProcessURL(self):
         
-        self.__search_frame.setResponse("Searching...")
+        
         try:
             yt = YouTube(
             self.__search_frame.EntryValue,
@@ -108,13 +108,13 @@ class App:
             on_complete_callback=self.__OnComplete
             )
 
-            self.__bottom.removeChildsFrames()
+            
 
             self.__search_frame.setResponse("Loading video data...")
 
-
-            
             self.__ShowVideoData(yt)
+
+
             self.__search_frame.setResponse("Loading streams...")
             
 
@@ -132,8 +132,7 @@ class App:
             self.__search_frame.setResponse("Sorry there has been an error, try again")
         else:
             self.__search_frame.removeResponse()
-
-        self.__searching_status = False
+            self.__searching_status = False
     
 
     def __ShowVideoData(self,video):
