@@ -28,6 +28,7 @@ class SearchFrame:
         self.__search_audio_only_filter = ttk.Radiobutton(self.__search_radio_button_frame)
         self.__search_video_only_filter = ttk.Radiobutton(self.__search_radio_button_frame)
         self.__search_progressive_filter = ttk.Radiobutton(self.__search_radio_button_frame)
+        self.__search_all_filter = ttk.Radiobutton(self.__search_radio_button_frame)
 
 
         self.__search_frame_response_label = ttk.Label(self.__search_frame)
@@ -58,6 +59,7 @@ class SearchFrame:
         self.__search_audio_only_filter.configure(text="Audio Only",variable=self.__search_filter_variable,value="Audio")
         self.__search_video_only_filter.configure(text="Video Only",variable=self.__search_filter_variable,value="Video")
         self.__search_progressive_filter.configure(text="Audio/Video",variable=self.__search_filter_variable,value="Progressive")
+        self.__search_all_filter.configure(text="All",variable=self.__search_filter_variable,value="All")
 
 
     def placeWidgets(self):
@@ -77,6 +79,7 @@ class SearchFrame:
         self.__search_audio_only_filter.grid(row=0,column=0,padx=(0,10))
         self.__search_video_only_filter.grid(row=0,column=1,padx=(0,10))
         self.__search_progressive_filter.grid(row=0,column=2,padx=(0,10))
+        self.__search_all_filter.grid(row=0,column=3,padx=(0,10))
 
 
     def setResponse(self,response:str):

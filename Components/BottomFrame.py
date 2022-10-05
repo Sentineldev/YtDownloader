@@ -4,7 +4,7 @@ from utils import dark_color
 
 from Components.VideoFrame import VideoFrame
 from Components.CanvaFrame import CanvasFrame
-
+from Components.StreamFrame import StreamFrame
 
 class BottomFrame:
     def __init__(self,parent):
@@ -12,16 +12,20 @@ class BottomFrame:
         self.__setParent()
         self.__videoFrame = VideoFrame(self.__parent)
         self.__canvasFrame = CanvasFrame(self.__parent)
-
+      
     def __setParent(self):
 
         parent_style = ttk.Style()
         parent_style.configure("Bottom.TFrame",background=dark_color)
-        self.__parent.configure(padding=0,style='Bottom.TFrame')
+        self.__parent.configure(style='Bottom.TFrame')
 
         self.__parent.columnconfigure(0,weight=1)
         self.__parent.rowconfigure(1,weight=1)
 
+  
+
+      
+        
 
     def placeParent(self):
         self.__parent.grid(row=1,column=0,sticky=(N,E,W,S))
@@ -30,9 +34,6 @@ class BottomFrame:
     def removeChildsFrames(self):
         self.__videoFrame.Parent.grid_remove()
         self.__canvasFrame.Canvas.grid_remove()
-
-
-   
 
 
     @property

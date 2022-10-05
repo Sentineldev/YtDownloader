@@ -78,6 +78,9 @@ class App:
 
     def __setBottom(self):
         self.__bottom.placeParent()
+        #self.__bottom.VideoFrame.placeWidgets()
+        #self.__bottom.CanvasFrame.placeCanvas()
+       
         
 
     def __searchButtonCallBack(self):
@@ -124,6 +127,8 @@ class App:
                 streams = yt.streams.filter(only_video=True)
             elif(self.__search_frame.FilterValue == "Progressive"):
                 streams = yt.streams.filter(progressive=True)
+            elif(self.__search_frame.FilterValue == "All"):
+                streams = yt.streams
 
             self.__ListStreams(streams)
             
@@ -151,7 +156,7 @@ class App:
             if column == 3:
                 column = 0
                 row+=1
-            stream_frame = StreamFrame(self.__bottom.CanvasFrame.Canvas)
+            stream_frame = StreamFrame(self.__bottom.CanvasFrame.WidgetFrame)
             if stream.is_progressive:
                 stream_frame.Format.configure(text="Format: Video/Audio")
                 stream_frame.Quality.configure(text=f"Resolution: {stream.resolution}")
@@ -174,6 +179,7 @@ class App:
     
     
     def __ButtonCallBack(self,stream):
+        self.__current_streams[stream.itag]['stream_frame'].ProgressBar.step(101)
         self.__current_streams[stream.itag]['stream_frame'].ProgressBarLabel.configure(text="Downloading... 0.00%")
         Thread(target=self.__DownloadFile,args=(self.__current_streams[stream.itag]['stream'],)).start()
         
@@ -188,6 +194,7 @@ class App:
                 print(e)
                 print('...')
                 self.__current_streams[stream.itag]['OnDownload'] = False
+                self.__current_streams[stream.itag]['stream_frame'].ProgressBarLabel.configure(text="Download stoped, error.")
             else:
                 self.__current_streams[stream.itag]['OnDownload'] = False
 

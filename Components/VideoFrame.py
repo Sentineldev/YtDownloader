@@ -39,7 +39,7 @@ class VideoFrame:
         self.__video_author.configure(style='Video.TLabel',text="Author")
 
     def placeWidgets(self):
-        self.__parent.grid(row=0,column=0,sticky=(N,E,W))
+        self.__parent.grid(row=0,column=0,sticky=(N,E,W),columnspan=2)
 
         self.__header.grid(row=0,column=0,padx=5,pady=5)
 
