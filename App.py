@@ -4,7 +4,7 @@ from tkinter import ttk
 
 from pytube import YouTube
 
-from utils import convertToMb,dark_color
+from utils import convertToMb,dark_color, joinSpaces,format_filename
 
 from functools import partial
 
@@ -102,8 +102,9 @@ class App:
 
 
     def __ProcessURL(self):
-        
-        
+
+            
+            
         try:
             yt = YouTube(
             self.__search_frame.EntryValue,
@@ -112,7 +113,6 @@ class App:
             )
 
             
-
             self.__search_frame.setResponse("Loading video data...")
 
             self.__ShowVideoData(yt)
@@ -186,13 +186,12 @@ class App:
     def __DownloadFile(self,stream):
         if not self.__current_streams[stream.itag]['OnDownload']:
             try:
-                print("Starting download...")
+                # print("Starting download...")
                 self.__current_streams[stream.itag]['OnDownload'] = True
-                output_filename = str(stream.itag)+"_"+stream.title+"."+stream.mime_type.split("/")[1]
+                output_filename = str(stream.itag)+"_"+format_filename(stream.title)+"."+stream.mime_type.split("/")[1]
                 stream.download(filename=output_filename)
             except Exception as e:
                 print(e)
-                print('...')
                 self.__current_streams[stream.itag]['OnDownload'] = False
                 self.__current_streams[stream.itag]['stream_frame'].ProgressBarLabel.configure(text="Download stoped, error.")
             else:
